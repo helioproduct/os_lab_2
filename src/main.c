@@ -9,8 +9,11 @@ int main(void)
         perror("Fork error\n");
         return -1;
     }
-
-    printf("Hello world! from %d\n", id);
-
+    if (id == 0) {
+        printf("Hello from child process\n");
+    }
+    else {
+        printf("hello from main process\n");
+    }
     return 0;
 }
