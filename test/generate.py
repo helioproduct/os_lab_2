@@ -14,9 +14,9 @@ def __main__():
     file = open(path_to_file, 'w')
 
     for _ in range(lines_amount):
-        file.write(str(uniform(0, 100)) + ' ')
-        file.write(str(uniform(0, 100)) + ' ')
-        file.write(str(uniform(0, 100)) + '\n')
+        file.write(str(round((uniform(0, 100)), 6)) + ' ')
+        file.write(str(round((uniform(0, 100)), 6)) + ' ')
+        file.write(str(round((uniform(0, 100)), 6)) + '\n')
 
     file.flush()
     file.close()
