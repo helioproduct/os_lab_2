@@ -18,7 +18,6 @@ int main()
 		int x, y;
 		read(fd[0], &x, sizeof(int));
 		read(fd[0], &x, sizeof(int));
-		
 		int res = x + y;
 		write(fd[1], &res, sizeof(int));
 		close(fd[0]);
