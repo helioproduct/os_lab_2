@@ -22,59 +22,49 @@ char* read_string()
     return string;
 }
 
-// int test(void)
-// {
-//     char *string = read_string();
-//     void *source = fopen(string, "r");
-
-//     if (source == NULL) {
-//         perror("File open error\n");
-//         return 1;
-//     }
-
-//     stdin = source;
-//     char c = getchar();
-//     while (c != EOF) {
-//         printf("%c", c);
-//         c = getchar();
-//     }    
-
-//     return 0;
-// }
-
 int main(void)
 {
-    int number = 1;
-
-
-    int id = fork();
-    if (id == -1) {
-        perror("Fork error\n");
-        return 1;
-    }
     int fd[2];
     if (pipe(fd) == -1) {
-        perror("Pipe error\n");
+        perror("pipe open error\n");
+        return 1;
+    }
+
+    printf("Enter path to the file: ");
+    char *path_to_file = read_string();
+    
+    int id = fork();
+    if (id == -1) {
+        perror("fork error\n");
         return 2;
     }
-    // child process
     if (id == 0) {
-        close(fd[1]); // close write
-        
-        int value_from_parent;
-        read(fd[0], &value_from_parent, sizeof(int));
-        
-        printf("got %d from parent\n", value_from_parent);
-        
         close(fd[0]);
-    }
-    // parent process
-    else {
-        close(fd[0]); // close read
-        // char *path_to_file = read_string();
-        write(fd[1], &number, sizeof(int));
+
+        FILE *source = fopen(path_to_file, "r");
+        stdin = source;
+
+        int read;
+        float first, second, third;
+        double sum = 0;
+        
+        while ((read = scanf("%f %f %f", &first, &second, &third)) > 0) {
+            sum += first;
+            sum += second;
+            sum += third;
+        }
+
+        write(fd[1], &sum, sizeof(sum));
+        fclose(stdin);
         close(fd[1]);
+    }   
+    else {
+        close(fd[1]);
+        double sum;
+        read(fd[0], &sum, sizeof(sum));
+        printf("[%d] Total sum = %lf\n", getpid(), sum);
         wait(NULL);
     }
+
     return 0;
 }
