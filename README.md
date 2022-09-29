@@ -1,2 +1,1 @@
-# os_lab_2
-OS lab #2
+# OS Lab №2  
