@@ -3,3 +3,6 @@
 
 # Source files
 *.out
+
+# Test files
+./test/test*
