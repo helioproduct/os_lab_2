@@ -41,23 +41,19 @@ int main(void)
     }
     if (id == 0) {
         close(fd[0]);
-
-        FILE *source = fopen(path_to_file, "r");
-        // stdin = source;
-
-        // int read;
-        // float first, second, third;
-        // double sum = 0;
-        
-        // while ((read = scanf("%f %f %f", &first, &second, &third)) > 0) {
-        //     sum += first;
-        //     sum += second;
-        //     sum += third;
-        // }
-
-        // write(fd[1], &sum, sizeof(sum));
-        // fclose(stdin);
-        // close(fd[1]);
+        FILE *source = freopen(path_to_file, "r", stdin);
+        if (source == NULL) {
+            perror("file open error");
+            return 3;
+        }
+        if (dup2(fd[1], STDOUT_FILENO) == -1) {
+            perror("Error changing stdout\n");
+            return 4;
+        }
+        if (execv("child.out", NULL) == -1)  {
+            perror("error executing child process\n");
+            return 5;
+        }
     }   
     else {
         close(fd[1]);
@@ -65,7 +61,6 @@ int main(void)
         read(fd[0], &sum, sizeof(sum));
         printf("[%d] Total sum = %lf\n", getpid(), sum);
         close(fd[0]);
-        wait(NULL);
     }
     return 0;
 }
