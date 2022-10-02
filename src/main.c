@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <errno.h>
 
 char* read_string() 
 {
@@ -42,29 +43,29 @@ int main(void)
         close(fd[0]);
 
         FILE *source = fopen(path_to_file, "r");
-        stdin = source;
+        // stdin = source;
 
-        int read;
-        float first, second, third;
-        double sum = 0;
+        // int read;
+        // float first, second, third;
+        // double sum = 0;
         
-        while ((read = scanf("%f %f %f", &first, &second, &third)) > 0) {
-            sum += first;
-            sum += second;
-            sum += third;
-        }
+        // while ((read = scanf("%f %f %f", &first, &second, &third)) > 0) {
+        //     sum += first;
+        //     sum += second;
+        //     sum += third;
+        // }
 
-        write(fd[1], &sum, sizeof(sum));
-        fclose(stdin);
-        close(fd[1]);
+        // write(fd[1], &sum, sizeof(sum));
+        // fclose(stdin);
+        // close(fd[1]);
     }   
     else {
         close(fd[1]);
         double sum;
         read(fd[0], &sum, sizeof(sum));
         printf("[%d] Total sum = %lf\n", getpid(), sum);
+        close(fd[0]);
         wait(NULL);
     }
-
     return 0;
 }
