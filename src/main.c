@@ -50,7 +50,7 @@ int main(void)
             perror("Error changing stdout\n");
             return 4;
         }
-        if (execv("child.out", NULL) == -1)  {
+        if (execv("child", NULL) == -1)  {
             perror("error executing child process\n");
             return 5;
         }

@@ -1,10 +1,12 @@
-CC = gcc
-FLAGS = -std=c99 -pthread -w -pipe -O3 -Wextra -Werror -Wall -Wno-sign-compare -pedantic -lm
+# FLAGS = -std=c11 -pedantic -Wall -Werror
 
-all: run
+all: child run
 
 run: main.c
-	$(CC) $(FLAGS) $^ -o $@
+	gcc $(FLAGS) main.c -o run
+
+child: child.c
+	gcc $(FLAGS) child.c -o child
 
 clean:
-	rm -f *.out run *.o
+	rm -f *.out run child *.o
