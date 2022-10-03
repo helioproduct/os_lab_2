@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
-#include <errno.h>
 
 char* read_string() 
 {
@@ -10,7 +9,6 @@ char* read_string()
     int capacity = 1; 
     char *string = (char*) malloc(sizeof(char));
     char c = getchar();
-    if (c == '\n') c = getchar();
     while (c != '\n') {
         string[len++] = c;
         if (len >= capacity) {
@@ -50,6 +48,7 @@ int main(void)
             perror("Error changing stdout\n");
             return 4;
         }
+        
         if (execv("child", NULL) == -1)  {
             perror("error executing child process\n");
             return 5;

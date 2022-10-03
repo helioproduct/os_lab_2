@@ -11,5 +11,6 @@ int main(void)
         sum += (first + second + third);
     }
     write(STDOUT_FILENO, &sum, sizeof(double));
+    close(STDOUT_FILENO);
     return 0;
 }
