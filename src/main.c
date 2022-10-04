@@ -2,20 +2,22 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <fcntl.h>
 
 char* read_string() 
 {
     int len = 0;
     int capacity = 1; 
     char *string = (char*) malloc(sizeof(char));
-    char c = getchar();
+    char c;
+    read(STDIN_FILENO, &c, sizeof(char));    
     while (c != '\n') {
         string[len++] = c;
         if (len >= capacity) {
             capacity *= 2;
             string = (char*) realloc(string, capacity * sizeof(char));
         }
-        c = getchar();
+        read(STDIN_FILENO, &c, 1);
     }
     string[len] = '\0';
     return string;
@@ -29,7 +31,9 @@ int main(void)
         return 1;
     }
 
-    printf("Enter path to the file: ");
+    char hello_message[] = "Enter path to file: ";
+    write(STDIN_FILENO, hello_message, sizeof(hello_message) / sizeof(char));
+
     char *path_to_file = read_string();
     
     int id = fork();
@@ -48,7 +52,6 @@ int main(void)
             perror("Error changing stdout\n");
             return 4;
         }
-        
         if (execv("child", NULL) == -1)  {
             perror("error executing child process\n");
             return 5;
@@ -58,7 +61,11 @@ int main(void)
         close(fd[1]);
         double sum;
         read(fd[0], &sum, sizeof(sum));
-        printf("[%d] Total sum = %lf\n", getpid(), sum);
+
+        char result_message[20];
+        sprintf(result_message, "Total sum = %lf\n", sum);
+
+        write(STDOUT_FILENO, result_message, 20);
         close(fd[0]);
     }
     return 0;

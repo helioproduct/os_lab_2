@@ -4,8 +4,11 @@
 
 int main(void)
 {
+    // TODO: one float number
     float first, second, third;
     double sum = 0;
+
+    // TODO: low lewel function intstead scanf
     while ((scanf("%f %f %f", &first, &second, &third)) > 0) 
     {
         sum += (first + second + third);
