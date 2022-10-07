@@ -9,30 +9,19 @@
 
 int main(void)
 {
-    float first, second, third;
-    // float number = 0;
+    double number = 0;
     double sum = 0;
+    char *string = read_string(STDIN_FILENO);
 
-    // int source_fd = open("../test/test.txt", O_RDONLY);
-    // char *string = read_string(source_fd);
-    // char *pointer;
-
-    // while (string != NULL) {
-
-    //     pointer = strtok(string, " "); //skip only spaces
-
-    //     while(pointer != NULL)
-    //      {
-    //         printf("%s\n", pointer);
-    //               pointer = strtok(NULL, " ");
-    //     }
-    //     string = read_string(source_fd);
-    // }
-
-    while ((scanf("%f %f %f", &first, &second, &third)) > 0) 
-    {
-        sum += (first + second + third);
+    while (string != NULL) {
+        char *token;
+        while ( (token = strsep(&string, " ")) != NULL) {
+            number = atof(token);
+            sum += number;
+        }
+        string = read_string(STDIN_FILENO);
     }
+
     write(STDOUT_FILENO, &sum, sizeof(double));
     close(STDOUT_FILENO);
     return 0;
