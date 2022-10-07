@@ -4,24 +4,7 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 
-char* read_string() 
-{
-    int len = 0;
-    int capacity = 1; 
-    char *string = (char*) malloc(sizeof(char));
-    char c;
-    read(STDIN_FILENO, &c, sizeof(char));    
-    while (c != '\n') {
-        string[len++] = c;
-        if (len >= capacity) {
-            capacity *= 2;
-            string = (char*) realloc(string, capacity * sizeof(char));
-        }
-        read(STDIN_FILENO, &c, 1);
-    }
-    string[len] = '\0';
-    return string;
-}
+#include "string_utils.h"
 
 int main(void)
 {
@@ -34,8 +17,8 @@ int main(void)
     char hello_message[] = "Enter path to file: ";
     write(STDIN_FILENO, hello_message, sizeof(hello_message) / sizeof(char));
 
-    char *path_to_file = read_string();
-    
+    char *path_to_file = read_string(STDIN_FILENO);
+
     int id = fork();
     if (id == -1) {
         perror("fork error\n");
@@ -43,19 +26,24 @@ int main(void)
     }
     if (id == 0) {
         close(fd[0]);
-        FILE *source = freopen(path_to_file, "r", stdin);
-        if (source == NULL) {
-            perror("file open error");
+        int source_fd = open(path_to_file, O_RDONLY);
+        if (source_fd == -1) {
+            perror("File open error\n");
             return 3;
+        }  
+        if (dup2(source_fd, STDIN_FILENO) == -1) {
+            perror("Error changing s2tdin\n");
+            return 4;
         }
         if (dup2(fd[1], STDOUT_FILENO) == -1) {
             perror("Error changing stdout\n");
-            return 4;
+            return 5;
         }
         if (execv("child", NULL) == -1)  {
             perror("error executing child process\n");
-            return 5;
+            return 6;
         }
+        close(fd[1]);
     }   
     else {
         close(fd[1]);
