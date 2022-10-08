@@ -13,6 +13,9 @@ char* read_string(int fd)
     char *string = NULL;
 
     ssize_t bytes_read = read(fd, &c, sizeof(char));
+    if (bytes_read == 0) {
+        return NULL;
+    } 
     if (bytes_read > 0) {
         string = (char*) malloc(sizeof(char));
     }
