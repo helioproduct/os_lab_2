@@ -15,8 +15,7 @@ int main(void)
     }
 
     char hello_message[] = "Enter path to file: ";
-    write(STDIN_FILENO, hello_message, sizeof(hello_message) / sizeof(char));
-
+    write(STDIN_FILENO, hello_message, sizeof(hello_message));
     char *path_to_file = read_string(STDIN_FILENO);
 
     int id = fork();
@@ -32,7 +31,7 @@ int main(void)
             return 3;
         }  
         if (dup2(source_fd, STDIN_FILENO) == -1) {
-            perror("Error changing s2tdin\n");
+            perror("Error changing stdin\n");
             return 4;
         }
         if (dup2(fd[1], STDOUT_FILENO) == -1) {
