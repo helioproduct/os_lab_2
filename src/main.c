@@ -61,7 +61,7 @@ int main(void)
         write(STDOUT_FILENO, result_message, sizeof(result_message));
         gcvt(sum, 10, result_message);
         write(STDOUT_FILENO, result_message, sizeof(result_message));
-
+        write(STDOUT_FILENO, "\n", 1);
         close(fd[0]);
     }
     return 0;
