@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -10,12 +9,11 @@
 int main(void)
 {
     float number = 0;
-    double sum = 0;
+    float sum = 0;
     int fd = STDIN_FILENO;
     char *string;
     while ( (string = read_string(fd)) != NULL )
     {
-        printf("%s", string);
         char *token;
         while ( (token = strsep(&string, " ")) != NULL )
         {
@@ -23,7 +21,7 @@ int main(void)
             sum += number;
         }
     }
-    write(STDOUT_FILENO, &sum, sizeof(double));
+    write(STDOUT_FILENO, &sum, sizeof(float));
     close(STDOUT_FILENO);
     return 0;
 }

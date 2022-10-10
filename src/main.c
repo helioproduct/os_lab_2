@@ -46,13 +46,15 @@ int main(void)
     }   
     else {
         close(fd[1]);
-        double sum;
+        float sum;
         read(fd[0], &sum, sizeof(sum));
 
-        char result_message[20];
-        sprintf(result_message, "Total sum = %lf\n", sum);
+        char result_message[] = "Total sum = ";
+        write(STDOUT_FILENO, result_message, sizeof(result_message));
 
-        write(STDOUT_FILENO, result_message, 20);
+        gcvt(sum, 10, result_message);
+        write(STDOUT_FILENO, result_message, sizeof(result_message));
+
         close(fd[0]);
     }
     return 0;
