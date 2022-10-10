@@ -13,19 +13,21 @@ char* read_string(int fd)
     char *string = NULL;
 
     ssize_t bytes_read = read(fd, &c, sizeof(char));
-    if (bytes_read == 0) {
+    if (bytes_read == 0) 
         return NULL;
-    } 
-    if (bytes_read > 0) {
+    if (bytes_read > 0) 
         string = (char*) malloc(sizeof(char));
-    }
-    while (1) {
-        if (c == '\n' || c == EOF) {
+        
+    while (1) 
+    {
+        if (c == '\n' || c == EOF) 
+        {
             string[len] == '\0';
             return string;
         }
         string[len++] = c;
-        if (len  >= capacity) {
+        if (len  >= capacity) 
+        {
             capacity *= 2;
             string = (char*) realloc(string, capacity * sizeof(char));
         }
